@@ -18,7 +18,7 @@ jobs:
       - name: "Install dependencies"
         run: |   # This step installs necessary Python packages multiple commands in a single run step
           python -m pip install --upgrade pip
-          pip install smtplib email
+        #   pip install smtplib email
 
       - name: "Send Email by executing Python script"
         run: python script.py  # This step runs the Python script to send the email
