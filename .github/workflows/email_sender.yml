@@ -18,6 +18,15 @@ jobs:
       - name: "Install dependencies"
         run: |   # This step installs necessary Python packages multiple commands in a single run step
           python -m pip install --upgrade pip
+      - name: Debug env vars
+        run: |
+          echo "SENDER_EMAIL=$SENDER_EMAIL"
+          echo "RECEIVER_EMAIL=$RECEIVER_EMAIL"
+          echo "SENDER_PASSWORD length: ${#SENDER_PASSWORD}"
+        env:
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
 
       - name: "Send Email by executing Python script"
         run: python script.py  # This step runs the Python script to send the email
