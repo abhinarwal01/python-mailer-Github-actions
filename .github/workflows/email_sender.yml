@@ -1,40 +1,48 @@
 name: "Send Email after workflow completion"
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   send_email:
     runs-on: ubuntu-latest
+
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
-        
-      - name: "Setup Python"
-        uses: actions/setup-python@v4   # This step sets up the Python environment
-        with:
-          python-version: '3.x' # Specify the Python version you need
-         
-      - name: "Install dependencies"
-        run: |   # This step installs necessary Python packages multiple commands in a single run step
-          python -m pip install --upgrade pip
 
-      - name: Debug env vars   # This step is for debugging purposes to check the environment variables
+      - name: "Setup Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: "Install dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          # No need to install smtplib; it’s in Python standard library
+
+      - name: Debug env vars
         run: |
           echo "SENDER_EMAIL=$SENDER_EMAIL"
           echo "RECEIVER_EMAIL=$RECEIVER_EMAIL"
-          echo "SENDER_PASSWORD length: ${#SENDER_PASSWORD}"   
+          echo "SENDER_PASSWORD length: ${#SENDER_PASSWORD}"
+          echo "WORKFLOW_NAME=$WORKFLOW_NAME"
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
         env:
           SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
-          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}   
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
 
       - name: "Send Email by executing Python script"
-        run: python script.py  # This step runs the Python script to send the email
+        run: python script.py
         env:
-          WORKFLOW_NAME: ${{ github.workflow }}  # Pass the workflow name as an environment variable
-          GITHUB_REPOSITORY: ${{ github.repository }}  # Pass the repository name as an environment variable
-          GITHUB_RUN_ID: ${{ github.run_id }}  # Pass the run ID as an environment variable
-          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}  # Use GitHub Secrets for sensitive data
-          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}  # Use GitHub Secrets for sensitive data
-          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}  # Use GitHub Secrets for sensitive data
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
