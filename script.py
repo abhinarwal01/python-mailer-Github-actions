@@ -35,8 +35,8 @@ def send_email(workflow_name, repo_name, workflow_run_id):
         print(f"Error: {e}")    
 
 send_email(
-    os.getenv('WORKFLOW_NAME'),
-    os.getenv('GITHUB_REPOSITORY'),
-    os.getenv('GITHUB_RUN_ID')
+    os.getenv('workflow_name'),
+    os.getenv('github_repository'),
+    os.getenv('github_run_id')
 )
 
