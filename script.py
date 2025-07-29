@@ -5,7 +5,7 @@ from email.mime.multipart import MIMEMultipart
 
 def send_email(workflow_name, repo_name, workflow_run_id):
     smtp_server = os.getenv('SMTP_SERVER')
-    smtp_port = int(os.getenv('SMTP_PORT', '587'))   # safe default
+    smtp_port = os.getenv('SMTP_PORT', '587')   # safe default
     smtp_username = os.getenv('SMTP_USERNAME')
     smtp_password = os.getenv('SMTP_PASSWORD')
     receiver_email = os.getenv('RECEIVER_EMAIL')
