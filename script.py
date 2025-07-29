@@ -5,7 +5,7 @@ from email.mime.multipart import MIMEMultipart
 
 def send_email(workflow_name, repo_name, workflow_run_id):
     smtp_server = os.getenv('SMTP_SERVER')
-    smtp_port = os.getenv('SMTP_PORT')
+    smtp_port = int(os.getenv('SMTP_PORT', '587'))   # safe default
     smtp_username = os.getenv('SMTP_USERNAME')
     smtp_password = os.getenv('SMTP_PASSWORD')
     receiver_email = os.getenv('RECEIVER_EMAIL')
@@ -21,6 +21,7 @@ def send_email(workflow_name, repo_name, workflow_run_id):
     msg.attach(MIMEText(body, 'plain'))
 
     try:
+        print(f"Connecting to {smtp_server}:{smtp_port} as {smtp_username}")
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
         server.login(smtp_username, smtp_password)
