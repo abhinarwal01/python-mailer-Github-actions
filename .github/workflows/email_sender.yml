@@ -6,6 +6,8 @@ on:
 jobs:
   send_email:
     runs-on: ubuntu-latest
+    environment: Prod
+
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
@@ -25,7 +27,7 @@ jobs:
           echo ${{ secrets.SMTP_PORT }} | sed 's/./& /g'
           echo ${{ secrets.SMTP_USERNAME }} | sed 's/./& /g'
           echo "SMTP_PASSWORD length: ${#SMTP_PASSWORD}"
-          echo ${{ secrets.RECEIVER_EMAIL }} | sed 's/./& /g'
+          echo ${{ secrets.RECEIVER_EMAIL }} 
         env:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
