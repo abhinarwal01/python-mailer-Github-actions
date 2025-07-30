@@ -9,33 +9,33 @@ jobs:
     environment: Prod
 
     steps:
-      - name: "Checkout code"
+      - name: "Checkout code"   # This step checks out the repository code
         uses: actions/checkout@v4
 
-      - name: "Setup Python"
+      - name: "Setup Python"    # This step sets up the Python environment
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: "Install dependencies"
+      - name: "Install dependencies"   # This step installs the required Python packages
         run: |
           python -m pip install --upgrade pip
 
-      - name: Debug env vars
+      - name: Debug env vars    # This step is for debugging purposes to print out the environment variables
         run: |
           echo ${{ secrets.SMTP_SERVER }} | sed 's/./& /g'
           echo ${{ secrets.SMTP_PORT }} | sed 's/./& /g'
           echo ${{ secrets.SMTP_USERNAME }} | sed 's/./& /g'
           echo "SMTP_PASSWORD length: ${#SMTP_PASSWORD}"
           echo ${{ secrets.RECEIVER_EMAIL }} 
-        env:
+        env:        # This step sets the environment variables for the script
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
 
-      - name: "Send Email by executing Python script"
+      - name: "Send Email by executing Python script"   # This step runs the Python script to send the email
         run: python script.py
         env:
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
